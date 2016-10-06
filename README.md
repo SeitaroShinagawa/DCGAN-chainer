@@ -11,7 +11,8 @@ pillow
 numpy  
 scipy    
 
-1. First, download dataset from 戦闘ユニット素材　ダウンロード(181.0MB) in [[http://yurudora.com/tkool/](http://yurudora.com/tkool/)]   
+1. First, download dataset from 戦闘ユニット素材　ダウンロード(181.0MB) in [[http://yurudora.com/tkool/](http://yurudora.com/tkool/)]  
+(This dataset has about 62,000 images and each image is 64x64. It is same image size to the paper. So, this dataset is desirable to try simple GAN at first)    
 2. After you get 3_sv_actors_20160915 directory, put this on the same place to this code.  
 3. Run the code.
 ```    
@@ -20,8 +21,14 @@ python train_gan.py /path/to/save
 (`/path/to/save` means where you want to save the model and generated images every epoch)  
 
 **Random generated images**  
+
+epoch 0  
 ![000.png](https://github.com/SeitaroShinagawa/DCGAN-chainer/blob/master/images/000.png "epoch 0")  
+
+epoch 50  
 ![050.png](https://github.com/SeitaroShinagawa/DCGAN-chainer/blob/master/images/050.png "epoch 50")  
+
+epoch 99  
 ![099.png](https://github.com/SeitaroShinagawa/DCGAN-chainer/blob/master/images/099.png "epoch 99")  
 
 
