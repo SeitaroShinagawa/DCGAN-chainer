@@ -19,4 +19,4 @@ python train_gan.py /path/to/save
 ```  
 (`/path/to/save` means where you want to save the model and generated images every epoch)  
 
-
+![代替テキスト](画像のURL "画像タイトル")
