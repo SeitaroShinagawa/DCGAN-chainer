@@ -7,7 +7,7 @@ gan.py: network definition (quoted from [[Chainerを使ってコンピュータ�
 RPGCharacters_util.py: Utility of dataset([[Yurudorashiru free image resource](http://yurudora.com/tkool/)])  
 
 ##Requirements (via pip install):  
-Chainer [[link](http://chainer.org/)] (verified this code works in version 1.16.0)  
+Chainer[[link](http://chainer.org/)](verified this code works in version 1.16.0)  
 pillow  
 numpy  
 scipy    
