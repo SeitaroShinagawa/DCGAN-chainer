@@ -14,9 +14,9 @@ scipy
 1. First, download dataset from 戦闘ユニット素材　ダウンロード(181.0MB) in [[http://yurudora.com/tkool/](http://yurudora.com/tkool/)]   
 2. After you get 3_sv_actors_20160915 directory, put this on the same place to this code.  
 3. Run the code.
-"""python  
+```    
 python train_gan.py /path/to/save  
-"""  
-("/path/to/save" means where you want to save the model and generated images every epoch)  
+```  
+(`/path/to/save` means where you want to save the model and generated images every epoch)  
 
 
