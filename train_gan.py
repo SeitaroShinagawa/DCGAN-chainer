@@ -97,8 +97,8 @@ for epoch in range(max_epoch):
         loss.backward()
         optG.update()
         n_fake_gen += B
-    #sys.stdout.write("\rtrain... epoch{}, {}/{}".format(epoch,i*batchsize,trainsize))
-    #sys.stdout.flush()
+    sys.stdout.write("\rtrain... epoch{}, {}/{}".format(epoch,i*batchsize,trainsize))
+    sys.stdout.flush()
   
   z = Gen.generate_hidden_variables(batchsize)
   x = Gen(Variable(xp.array(z))) #(B,3,64,64) B:batchsize
@@ -136,8 +136,8 @@ for epoch in range(max_epoch):
 
         y, loss = Dis(x,label,train=False)
         real_belief_mean += xp.sum(y.data)
-        #sys.stdout.write("\rtest real...{}/{}".format(j,testsize))
-        #sys.stdout.flush()
+        sys.stdout.write("\rtest real...{}/{}".format(j,testsize))
+        sys.stdout.flush()
   print(" test real belief mean:{}({}/{})".format(real_belief_mean/testsize,real_belief_mean,testsize))
   for j,(data_i,data) in enumerate(real.gen_test(1)):
         z = Gen.generate_hidden_variables(1)
@@ -146,8 +146,8 @@ for epoch in range(max_epoch):
         
         y, loss = Dis(x,label,train=False)
         fake_belief_mean += xp.sum(y.data) 
-        #sys.stdout.write("\rtest fake...{}/{}".format(j,testsize))
-        #sys.stdout.flush()
+        sys.stdout.write("\rtest fake...{}/{}".format(j,testsize))
+        sys.stdout.flush()
   print(" test fake belief mean:{}({}/{})".format(fake_belief_mean/testsize,fake_belief_mean,testsize))
         
 

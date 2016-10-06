@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
-from sklearn.datasets import fetch_mldata
+#from sklearn.datasets import fetch_mldata
 
 def clip(a):
   return 0 if a<0 else (255 if a>255 else a)
