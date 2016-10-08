@@ -19,10 +19,10 @@ After you get 3_sv_actors_20160915 directory, put it to the same place to this c
 Fill out "image_root" path in train_gan.py (You can see from L.42 as below).  
 ```python  
 image_root="/path/to/3_sv_actors_20160915"  
-        img_list=[]  
-        with open(image_root+"/list.txt",'r') as f:  
-            for line in f:  
-                img_list.append(line.strip())  
+img_list=[]  
+with open(image_root+"/list.txt",'r') as f:  
+  for line in f:  
+    img_list.append(line.strip())  
 ```  
 As you can see, you need to create image list "list.txt" as follows,  
 ```   
