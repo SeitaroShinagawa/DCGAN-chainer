@@ -41,7 +41,7 @@ class RPGCharacters:
         label_pose_id = np.load("RPGCharacters_poseID.npy")
       else:        
         sys.stdout.write("create RPGCharacter.npy, RPGCharacters_charaID.npy, RPGCharacters_poseID.npy...\n")
-        image_root="/path/to/3_sv_actors_20160915"
+        image_root="/project/nakamura-lab07/Work/seitaro-s/RPGimages/3_sv_actors_20160915"
         img_list=[]
         with open(image_root+"/list.txt",'r') as f:
             for line in f:
@@ -85,7 +85,12 @@ class RPGCharacters:
       self.test_character_id = label_character_id[60000:]
       self.train_pose_id = label_pose_id[:60000]
       self.test_pose_id = label_pose_id[60000:]      
-
+      self.height = 64
+      self.width = 64
+      self.C = 3 #color dimension
+      self.train_size = len(self.train_array)
+      self.test_size = len(self.test_array)
+ 
     def gen_train(self,batchsize,Random=True):
         if Random:
             indexes = np.random.permutation(self.train_array.shape[0])

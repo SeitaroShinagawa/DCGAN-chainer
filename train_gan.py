@@ -33,7 +33,7 @@ def save_img(img_array,save_path): #save from np.array (3,height,width)
 Gen = Generator()
 Dis = Discriminator()
 
-gpu = -1 
+gpu = 0
 if gpu>=0:
     xp = cuda.cupy
     cuda.get_device(gpu).use()
@@ -48,8 +48,8 @@ optG.setup(Gen)
 optD.setup(Dis)
 
 real = RPGCharacters()
-trainsize=real.train_array.shape[0]
-testsize=real.test_array.shape[0]
+trainsize=real.train_size
+testsize=real.test_size
 
 loss_fake_gen = 0.0
 loss_fake_dis = 0.0
