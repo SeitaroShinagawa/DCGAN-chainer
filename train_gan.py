@@ -111,7 +111,7 @@ for epoch in range(max_epoch):
       img=tmp[i][j:j+8]
       img=np.transpose(img.reshape(64*8,64),(1,0))
       img_array2.append(img)
-    img_array2=np.array(img_array2).reshape(8*64,int(batchsize/8*64))
+    img_array2=np.array(img_array2).reshape(int(batchsize/8*64),8*64)
     img_array.append(np.transpose(img_array2,(1,0)))
   img_array = np.array(img_array)
   print("\nsave fig...")
