@@ -41,7 +41,7 @@ class RPGCharacters:
         label_pose_id = np.load("RPGCharacters_poseID.npy")
       else:        
         sys.stdout.write("create RPGCharacter.npy, RPGCharacters_charaID.npy, RPGCharacters_poseID.npy...\n")
-        image_root="/path/to/3_sv_actors_20160915"
+        image_root="/project/nakamura-lab07/Work/seitaro-s/RPGimages/3_sv_actors_20160915"
         img_list=[]
         with open(image_root+"/list.txt",'r') as f:
             for line in f:

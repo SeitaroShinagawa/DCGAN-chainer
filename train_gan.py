@@ -33,7 +33,7 @@ def save_img(img_array,save_path): #save from np.array (3,height,width)
 Gen = Generator()
 Dis = Discriminator()
 
-gpu = -1
+gpu = 0
 if gpu>=0:
     xp = cuda.cupy
     cuda.get_device(gpu).use()
@@ -111,7 +111,7 @@ for epoch in range(max_epoch):
       img=tmp[i][j:j+8]
       img=np.transpose(img.reshape(64*8,64),(1,0))
       img_array2.append(img)
-    img_array2=np.array(img_array2).reshape(8*64,int(batchsize/8*64))
+    img_array2=np.array(img_array2).reshape(int(batchsize/8*64),8*64)
     img_array.append(np.transpose(img_array2,(1,0)))
   img_array = np.array(img_array)
   print("\nsave fig...")
