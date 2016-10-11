@@ -16,9 +16,9 @@ scipy
 First, download dataset from "戦闘ユニット素材　ダウンロード(181.0MB)" in [[http://yurudora.com/tkool/](http://yurudora.com/tkool/)]  
 (This dataset has about 62,000 images and each image is 64x64. It is same image size to the paper. So, this dataset is desirable to try simple GAN at first)    
 After you get 3_sv_actors_20160915 directory, put it to the same place to this code.  
-Fill out "image_root" path in train_gan.py (You can see from L.42 as below).  
+Fill out "image_root" path in train_gan.py (You can see from L.44 as below).  
 ```python  
-image_root="/path/to/3_sv_actors_20160915"  
+image_root="/path/to/3_sv_actors_20160915" #need to be modified 
 img_list=[]  
 with open(image_root+"/list.txt",'r') as f:  
   for line in f:  
