@@ -34,11 +34,13 @@ class RPGCharacters:
     data   ?x4x64x64 (RGBA)
     """
     def __init__(self,binarize=False):
-      if os.path.exists("RPGCharacters.npy"):
-        sys.stdout.write("load RPGCharacter.npy\n")
+      if os.path.exists("RPGCharacters.npy") and os.path.exists("RPGCharacters_charaID.npy") and os.path.exists("RPGCharacters_charaID.npy"):
+        sys.stdout.write("load PGCharacter.npy, RPGCharacters_charaID.npy, RPGCharacters_poseID.npy...\n")
         imgs_array = np.load("RPGCharacters.npy")
+        label_character_id = np.load("RPGCharacters_charaID.npy")
+        label_pose_id = np.load("RPGCharacters_poseID.npy")
       else:        
-        sys.stdout.write("create RPGCharacter.npy\n")
+        sys.stdout.write("create RPGCharacter.npy, RPGCharacters_charaID.npy, RPGCharacters_poseID.npy...\n")
         image_root="/project/nakamura-lab07/Work/seitaro-s/RPGimages/3_sv_actors_20160915"
         img_list=[]
         with open(image_root+"/list.txt",'r') as f:
@@ -46,31 +48,43 @@ class RPGCharacters:
                 img_list.append(line.strip())
         
         imgs_array=[]
-        for img_name in img_list:
+        label_character_id=[] #(characterID,poseID)
+        label_pose_id=[]
+        for id_, img_name in enumerate(img_list):
             img = load_img(image_root+"/3_sv_actors/"+img_name)
             img = np.transpose(img,(1,2,0))
 
             img_bar_list = np.hsplit(img,9)
             imgs=[]
-            for i in img_bar_list:
+            for num_i, i in enumerate(img_bar_list):
                 img_list = np.vsplit(i,6)
-                for j in img_list:
+                for num_j, j in enumerate(img_list):
                     imgs.append(j)
+                    poseid = 6*num_i+num_j
+                    label_character_id.append([id_])
+                    label_pose_id.append([poseid])
             imgs = np.array(imgs,dtype=np.float32)
             imgs = np.transpose(imgs,(0,3,1,2))
             imgs_array.append(imgs)
         imgs_array = np.array(imgs_array,dtype=np.float32)
+        label_character_id = np.array(label_character_id,dtype=np.int32)
+        label_pose_id = np.array(label_pose_id,dtype=np.int32)
         ishape = imgs_array.shape
         imgs_array = np.reshape(imgs_array,(ishape[0]*ishape[1],ishape[2],ishape[3],ishape[4]))
 
-        #RGBA --> RGB
-        RGB_array = np.array([img_array[:-1] for img_array in imgs_array])
+        RGB_array = np.array([img_array[:-1] for img_array in imgs_array]) #RGBA->RGB
         imgs_array = RGB_array
-
-        sys.stdout.write("save RPGCharacter.npy\n")
-        np.save("RPGCharacters",imgs_array)
+      
+        sys.stdout.write("save RPGCharacter.npy, RPGCharacters_charaID.npy, RPGCharacters_poseID.npy\n")
+        np.save("RPGCharacters.npy",imgs_array)
+        np.save("RPGCharacters_charaID.npy",label_character_id)
+        np.save("RPGCharacters_poseID.npy",label_pose_id)
       self.train_array = imgs_array[:60000]
       self.test_array = imgs_array[60000:]
+      self.train_character_id = label_character_id[:60000]
+      self.test_character_id = label_character_id[60000:]
+      self.train_pose_id = label_pose_id[:60000]
+      self.test_pose_id = label_pose_id[60000:]      
 
     def gen_train(self,batchsize,Random=True):
         if Random:
@@ -80,8 +94,10 @@ class RPGCharacters:
         num = 0
         while batchsize*num < len(indexes):
             indexparts = indexes[batchsize*num:batchsize*(num+1)]
-            image_batch = np.asarray([self.train_array[x] for x in indexparts],dtype=np.float32)
-            yield indexparts, image_batch
+            image_batch = np.asarray([self.train_array[x] for x in indexparts],dtype=np.float32) 
+            chara_batch = np.asarray([self.train_character_id[x] for x in indexparts],dtype=np.int32)
+            pose_batch = np.asarray([self.train_pose_id[x] for x in indexparts],dtype=np.int32)
+            yield image_batch, chara_batch, pose_batch
             num += 1 
 
     def gen_test(self,batchsize):
@@ -90,60 +106,8 @@ class RPGCharacters:
         while batchsize*num < len(indexes):
             indexparts = indexes[batchsize*num:batchsize*(num+1)]
             image_batch = np.asarray([self.test_array[x] for x in indexparts],dtype=np.float32)
-            yield indexparts, image_batch
-            num += 1 
-
-
-class MNIST:
-    """
-    MNIST handwritten recognition data
-    train   60000x784 -> 60000x28x28
-    test    60000x784 -> 10000x28x28
-    train_label 60000x10
-    y_label     10000x10
-    """
-    def __init__(self,binarize=False):
-        mnist = fetch_mldata('MNIST original')
-        x_all = mnist.data.astype(np.float32)/255
-        y_all = mnist.target.astype(np.int32)
-        x_train, x_test = np.split(x_all, [60000])
-        y_train, y_test = np.split(y_all, [60000])
-        if binarize==True:
-            x_train = Binarize(x_train)
-            x_test = Binarize(x_test)
-        x_train = np.array(x_train).reshape(60000,28,28)
-        x_test = np.array(x_test).reshape(10000,28,28)
-
-        self.train = x_train
-        self.test = x_test
-        self.train_label = y_train
-        self.test_label = y_test
-        self.C=1
-        self.width=28
-        self.height=28
-
-    def gen_train(self,batchsize,Random=True):
-        if Random:
-            indexes = np.random.permutation(60000)
-        else:
-            indexes = np.arange(60000)
-        num = 0
-        while batchsize*num < len(indexes):
-            indexparts = indexes[batchsize*num:batchsize*(num+1)]
-            image_batch = np.asarray([[self.train[x]] for x in indexparts],dtype=np.float32)
-            label_batch = np.asarray([[self.train_label[x]] for x in indexparts],dtype=np.float32)
-            yield image_batch ,label_batch
-            num += 1 
-                
-    def gen_test(self,batchsize):
-        """
-        Attention! minibatch calculation doesn't generate exact result.
-        If you need exact result, make batchsize=1.
-        """
-        num = 0
-        while batchsize*num < 10000:
-            image_batch = np.asarray(self.test[batchsize*num:batchsize*(num+1)],dtype=np.float32)
-            label_batch = np.asarray(self.test_label[batchsize*num:batchsize*(num+1)],dtype=np.float32)
-            yield image_batch,label_batch
+            chara_batch = np.asarray([self.test_character_id[x] for x in indexparts],dtype=np.int32)
+            pose_batch = np.asarray([self.test_pose_id[x] for x in indexparts],dtype=np.int32)
+            yield image_batch, chara_batch, pose_batch
             num += 1 
 
