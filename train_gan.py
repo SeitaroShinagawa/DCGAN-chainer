@@ -51,12 +51,12 @@ real = RPGCharacters()
 trainsize=real.train_size
 testsize=real.test_size
 
-loss_fake_gen = 0.0
-loss_fake_dis = 0.0
-loss_real_dis = 0.0
 batchsize = 64
 max_epoch = 100
 for epoch in range(max_epoch):
+  loss_fake_gen = 0.0
+  loss_fake_dis = 0.0
+  loss_real_dis = 0.0
   n_fake_gen = 0
   n_fake_dis = 0
   n_real_dis = 0
